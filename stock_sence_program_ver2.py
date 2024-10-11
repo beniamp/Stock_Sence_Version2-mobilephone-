@@ -4,7 +4,7 @@ import numpy as np
 import jdatetime
 from datetime import datetime, timedelta
 import itertools
-from PIL import image
+from PIL import Image
 
 # Page setting
 st.set_page_config(
