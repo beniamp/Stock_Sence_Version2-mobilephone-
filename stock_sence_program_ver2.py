@@ -19,9 +19,6 @@ st.set_page_config(
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# Title
-st.title("Stock Sence - Inventory Management Suggestor for Restocking Items - Mobile Phones")
-
 # Use HTML to center the title
 st.markdown(
     """
