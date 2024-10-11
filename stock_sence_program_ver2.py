@@ -228,7 +228,7 @@ rounded_style = """
             border-radius: 15px; /* Rounded corners */
             padding: 20px; /* Padding inside the rectangle */
             margin: 10px; /* Margin outside the rectangle */
-            background-color: #1b2933; /* Background color */
+            background-color: #d46b2a; /* Background color */
             text-align: center; /* Center text alignment */
             font-size: 20px; /* Font size */
             color: #f2f5f7; /* Font color - change this value to your desired color */
