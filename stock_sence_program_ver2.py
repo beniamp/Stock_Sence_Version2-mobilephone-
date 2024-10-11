@@ -22,6 +22,14 @@ with open('style.css') as f:
 # Title
 st.title("Stock Sence - Inventory Management Suggestor for Restocking Items - Mobile Phones")
 
+# Use HTML to center the title
+st.markdown(
+    """
+    <h1 style="text-align: center;">Stock Sence - Inventory Management Suggestor for Restocking Items - Mobile Phones</h1>
+    """, 
+    unsafe_allow_html=True
+)
+
 # Display image
 image = Image.open('dgland_icon.png')
 st.image(image, width=100)  # Adjust width as needed
