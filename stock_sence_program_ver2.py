@@ -8,8 +8,8 @@ import itertools
 
 # Page setting
 st.set_page_config(
-    page_title="Stock Sence- MobilePhones",
-    page_icon="📦",
+    page_title="Stock Sence- Mobile Phones",
+    page_icon="📱",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -121,6 +121,70 @@ total_quantity_last_month = df_last_month['total_quantity'].sum()
 total_quantity_overall = df['total_quantity'].sum()
 
 
+# -----  SECTION 3 + 1: displaying starting and ending date calculated
+
+
+# Find the minimum and maximum dates
+first_date = merged_df['gregorian_date'].min()
+last_date = merged_df['gregorian_date'].max()
+
+# Filter the rows where the 'gregorian_date' matches the first_date and last_date
+first_row = merged_df[merged_df['gregorian_date'] == first_date]
+last_row = merged_df[merged_df['gregorian_date'] == last_date]
+
+# Access the values from the same row but different columns (example: 'column_name')
+first_per_date = first_row['date'].values[0]  # Replace 'column_name' with your desired column
+last_per_date = last_row['date'].values[0]  # Replace 'column_name' with your desired column
+
+st.write(f"Calculated Date Starting From: {first_per_date} to {last_per_date}")
+
+# ----- SECTION 4 + 1: Selection widget for applying date filter ranging from minimum to maximum existing date values
+
+# Create 3 columns with empty space on both sides for centering the buttons
+#col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 1])
+
+#with col1:
+#    butt1 = st.button('1 Day Selection')
+#    if butt1:
+#        st.write("Selecting 1 day ago")
+#    else:
+#        st.write('Not Selecting 1 day ago')
+        
+#with col2:
+#    butt2 = st.button('1 Week Selection')
+#    if butt2:
+#        st.write("Selecting 1 week ago")
+#    else:
+#        st.write('Not Selecting 1 week ago')
+
+#with col3:
+#    butt3 = st.button('1 Month Ago')
+#    if butt3:
+#        st.write("Selecting 1 month ago")
+#    else:
+#        st.write('Not Selecting 1 month ago')
+        
+#with col4:
+#    butt4 = st.button('2 Month Ago')
+#    if butt4:
+#        st.write("Selecting 2 month ago")
+#    else:
+#        st.write('Not Selecting 2 month ago')
+        
+#with col5:
+#    butt5 = st.button('3 Month Ago')
+#    if butt5:
+#        st.write("Selecting 3 month ago")
+#    else:
+#        st.write('Not Selecting 3 month ago')
+        
+#with col6:
+#    butt6 = st.button('4 Month Ago')
+#    if butt6:
+#       st.write("Selecting 4 month ago")
+#    else:
+#        st.write('Not Selecting 4 month ago')
+
 
 # ----- SECTION 5: displayment to selection widget on DLP, DLPC, and stores unique values 
 
@@ -137,29 +201,58 @@ else:
 product_list = ['All products'] + filtered_df['DLP'].unique().tolist()
 selected_product = st.selectbox('Select Product', product_list) 
 
-if selected_category != 'All products':
+if selected_product != 'All products':
     filtered_df = filtered_df[filtered_df['DLP'] == selected_product]
-else:
-    filtered_df = filtered_df
 
 st.write(f'Selected Category: {selected_category} / selected Product: {selected_product}')
 
-
-
 # Filter DataFrame by selected category
 
+# ---- SECTION6: Display Metrics in Three Rectangles ----
 # Calculated summary based on filtered df of category and DLP
-df_last_day = filtered_df[(filtered_df['gregorian_date'] >= last_day) | ( filtered_df['gregorian_date'].isnull())]
-df_last_week = filtered_df[(filtered_df['gregorian_date'] >= last_week) | ( filtered_df['gregorian_date'].isnull())]
-df_last_month = filtered_df[(filtered_df['gregorian_date'] >= last_month) | ( filtered_df['gregorian_date'].isnull())]
-
+df_last_day = filtered_df[(filtered_df['gregorian_date'] >= last_day) | (filtered_df['gregorian_date'].isnull())]
+df_last_week = filtered_df[(filtered_df['gregorian_date'] >= last_week) | (filtered_df['gregorian_date'].isnull())]
+df_last_month = filtered_df[(filtered_df['gregorian_date'] >= last_month) | (filtered_df['gregorian_date'].isnull())]
 
 # calculate total quantity per each time period
-total_quantity_last_day = df_last_day['total_quantity'].sum()
-total_quantity_last_week = df_last_week['total_quantity'].sum()
-total_quantity_last_month = df_last_month['total_quantity'].sum()
+total_quantity_last_day = int(df_last_day['total_quantity'].sum())
+total_quantity_last_week = int(df_last_week['total_quantity'].sum())
+total_quantity_last_month = int(df_last_month['total_quantity'].sum())
 
+# ---- SECTION7: Display Metrics in Rounded Rectangles ----
+# CSS styling for rounded rectangles
+rounded_style = """
+    <style>
+        .rounded-rectangle {
+            border: 2px solid #007BFF; /* Border color */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Padding inside the rectangle */
+            margin: 10px; /* Margin outside the rectangle */
+            background-color: #1b2933; /* Background color */
+            text-align: center; /* Center text alignment */
+            font-size: 20px; /* Font size */
+            color: #f2f5f7; /* Font color - change this value to your desired color */
+        }
+    </style>
+"""
 
+# Injecting CSS into the Streamlit app
+st.markdown(rounded_style, unsafe_allow_html=True)
+
+# Create 3 columns for the metrics
+col1, col2, col3 = st.columns(3)
+
+# Display the metric for the last day in a rounded rectangle
+with col1:
+    st.markdown(f'<div class="rounded-rectangle">Total Quantity (Last Day): {total_quantity_last_day}</div>', unsafe_allow_html=True)
+
+# Display the metric for the last week in a rounded rectangle
+with col2:
+    st.markdown(f'<div class="rounded-rectangle">Total Quantity (Last Week): {total_quantity_last_week}</div>', unsafe_allow_html=True)
+
+# Display the metric for the last month in a rounded rectangle
+with col3:
+    st.markdown(f'<div class="rounded-rectangle">Total Quantity (Last Month): {total_quantity_last_month}</div>', unsafe_allow_html=True)
 
 
 
@@ -188,9 +281,28 @@ st.write(f'Selected Store: {selected_store} / selected color: {selected_color}')
 if selected_color != 'All colors':
     filtered_df = filtered_df[filtered_df['color'] == selected_color]
 
-if selected_store != 'All store':
-    filtered_df = filtered_df[filtered_df['store'] == selected_color]
-    
-    
-    
-    
+if selected_store != 'All stores':
+    filtered_df = filtered_df[filtered_df['store'] == selected_store]
+
+
+# ----- SECTION 8: caclculating essential metrics based on values selected in color, DLP, DLPC, and store
+filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'max'}).reset_index()
+filtered_df['total_quantity'].fillna(0, inplace=True)
+filtered_df['total_inventory'].fillna(0, inplace=True)
+
+filtered_df['avg_demand'] = filtered_df['total_quantity'] / len(merged_df['date'].unique())
+filtered_df['days_to_out_stock'] = np.ceil(filtered_df['total_inventory'] / filtered_df['avg_demand'])
+
+
+filtered_df['short_term_reorder'] = np.ceil((filtered_df['avg_demand'] * 3) + (filtered_df['avg_demand'] * 5) / 2)
+filtered_df['medium_term_reorder'] = np.ceil((filtered_df['avg_demand'] * 12) + (filtered_df['avg_demand'] * 15) / 2)
+filtered_df['long_term_reorder'] = np.ceil((filtered_df['avg_demand'] * 21) + (filtered_df['avg_demand'] * 30) / 2)
+
+
+
+final_table = filtered_df[['DLP', 'store', 'color', 'total_quantity', 'total_inventory', 'avg_demand', 'days_to_out_stock', 'short_term_reorder', 'medium_term_reorder', 'long_term_reorder']]
+st.write(final_table)
+
+
+# final_second = final_table.groupby(['DLP', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'sum', 'avg_demand': 'avg'}).reset_index()
+# st.write(final_second)
