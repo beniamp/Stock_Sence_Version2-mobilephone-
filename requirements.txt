@@ -1,0 +1,7 @@
+streamlit
+pandas
+jdatetime
+numpy
+datetime
+itertools
+timedelta
