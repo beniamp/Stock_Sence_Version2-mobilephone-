@@ -4,7 +4,7 @@ import numpy as np
 import jdatetime
 from datetime import datetime, timedelta
 import itertools
-
+from PIL import image
 
 # Page setting
 st.set_page_config(
@@ -14,9 +14,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+
 # Load custom CSS
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Title
+st.title("Stock Sence - Inventory Management Suggestor for Restocking Items - Mobile Phones")
+
+# Display image
+image = Image.open('dgland_icon.png')
+st.image(image, width=100)  # Adjust width as needed
 
 # Inject custom CSS to style the select box
 # Display various filtered and calculated data
