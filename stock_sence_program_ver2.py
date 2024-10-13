@@ -89,7 +89,7 @@ df['gregorian_date'] = df["date"].apply(jalali_to_gregorian)
 
 # creating a dimension table for better tracking the diversity of each store
 
-unique_dim_items = df[['DLP', 'DLPC', 'name', 'code', 'color', 'category']].drop_duplicates()
+unique_dim_items = df[['DLP', 'DLPC', 'name', 'code', 'color', 'category', 'brand']].drop_duplicates()
 stores_val = df['store'].drop_duplicates().tolist()
 
 # performing acrtesian product combination for each stores
@@ -104,7 +104,7 @@ dim_table = unique_dim_items.merge(store_combination, how='cross')
 
 
 
-merged_df = df.merge(dim_table, on=['DLP', 'DLPC', 'name', 'code', 'category', 'store', 'color'], 
+merged_df = df.merge(dim_table, on=['DLP', 'DLPC', 'name', 'code', 'category', 'store', 'color', 'brand'], 
                      how='right').reset_index(drop=True)
 
 
@@ -202,11 +202,11 @@ st.write(f"Calculated Date Starting From: {first_per_date} to {last_per_date}")
 # ----- SECTION 5: displayment to selection widget on DLP, DLPC, and stores unique values 
 
 # Select box widget values, in order; DLP, store, DLPC
-category_list = ['All categories'] + merged_df['category'].unique().tolist()
-selected_category = st.selectbox('Select Category', category_list)
+category_list = ['All brands'] + merged_df['brand'].unique().tolist()
+selected_category = st.selectbox('Select Brand', category_list)
 
-if selected_category != 'All categories':
-    filtered_df = merged_df[merged_df['category'] == selected_category]
+if selected_category != 'All brands':
+    filtered_df = merged_df[merged_df['brands'] == selected_category]
 else:
     filtered_df = merged_df
 
