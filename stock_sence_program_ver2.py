@@ -297,7 +297,7 @@ if selected_color != 'All colors':
 if selected_store != 'All stores':
     filtered_df = filtered_df[filtered_df['store'] == selected_store]
 
-
+filtered_df['purchase_price'].fillna("-", inplace=True)
 # ----- SECTION 8: caclculating essential metrics based on values selected in color, DLP, DLPC, and store
 filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'max', 'purchase_price': 'mean'}).reset_index()
 filtered_df['total_quantity'].fillna(0, inplace=True)
