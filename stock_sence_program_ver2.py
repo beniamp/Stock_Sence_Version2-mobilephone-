@@ -202,11 +202,11 @@ st.write(f"Calculated Date Starting From: {first_per_date} to {last_per_date}")
 # ----- SECTION 5: displayment to selection widget on DLP, DLPC, and stores unique values 
 
 # Select box widget values, in order; DLP, store, DLPC
-category_list = ['All brands'] + merged_df['brands'].unique().tolist()
+category_list = ['All brands'] + merged_df['brand'].unique().tolist()
 selected_category = st.selectbox('Select Brand', category_list)
 
 if selected_category != 'All brands':
-    filtered_df = merged_df[merged_df['brands'] == selected_category]
+    filtered_df = merged_df[merged_df['brand'] == selected_category]
 else:
     filtered_df = merged_df
 
