@@ -302,7 +302,7 @@ if selected_store != 'All stores':
 def last_purchase_price(group):
     if not group.empty:
         # Sort the group by date and get the purchase_price for the last date
-        last_record = group.sort_values(by='date', ascending=False).iloc[0]
+        last_record = group.sort_values(by='gregorian_date', ascending=False).iloc[0]
         return last_record['purchase_price']
     return 0  # If no date, return 0
 
