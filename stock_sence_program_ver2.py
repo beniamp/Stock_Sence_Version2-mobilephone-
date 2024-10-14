@@ -299,7 +299,7 @@ if selected_store != 'All stores':
 
 
 # ----- SECTION 8: caclculating essential metrics based on values selected in color, DLP, DLPC, and store
-filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'max', 'purchase_price': 'avg'}).reset_index()
+filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'max', 'purchase_price': 'mean'}).reset_index()
 filtered_df['total_quantity'].fillna(0, inplace=True)
 filtered_df['total_inventory'].fillna(0, inplace=True)
 
