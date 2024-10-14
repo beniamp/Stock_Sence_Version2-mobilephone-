@@ -297,7 +297,23 @@ if selected_color != 'All colors':
 if selected_store != 'All stores':
     filtered_df = filtered_df[filtered_df['store'] == selected_store]
 
-filtered_df['purchase_price'].fillna("-", inplace=True)
+# ------ SECTION 9: Calculating last recorded date
+# Assuming 'date' is the column to track the latest record
+def last_purchase_price(group):
+    if not group.empty:
+        # Sort the group by date and get the purchase_price for the last date
+        last_record = group.sort_values(by='date', ascending=False).iloc[0]
+        return last_record['purchase_price']
+    return 0  # If no date, return 0
+
+# Applying the custom aggregation
+filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({
+    'total_quantity': 'sum',
+    'total_inventory': 'max',
+    'purchase_price': last_purchase_price  # Custom function for purchase_price
+}).reset_index()
+
+
 # ----- SECTION 8: caclculating essential metrics based on values selected in color, DLP, DLPC, and store
 filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({'total_quantity': 'sum', 'total_inventory': 'max', 'purchase_price': 'mean'}).reset_index()
 filtered_df['total_quantity'].fillna(0, inplace=True)
