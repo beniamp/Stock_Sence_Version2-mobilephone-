@@ -313,7 +313,7 @@ filtered_df['long_term_reorder'] = np.ceil((filtered_df['avg_demand'] * 21) + (f
 
 
 
-final_table = filtered_df[['DLP', 'store', 'color', 'total_quantity', 'total_inventory', 'avg_demand', 'days_to_out_stock', 'short_term_reorder', 'medium_term_reorder', 'long_term_reorder', 'avg_purchase_price']]
+final_table = filtered_df[['DLP', 'store', 'color', 'total_quantity', 'total_inventory', 'avg_demand', 'days_to_out_stock', 'short_term_reorder', 'medium_term_reorder', 'long_term_reorder', 'purchase_price']]
 st.write(final_table)
 
 
