@@ -301,17 +301,24 @@ if selected_store != 'All stores':
 # Assuming 'date' is the column to track the latest record
 def last_purchase_price(group):
     if not group.empty:
-        # Sort the group by date and get the purchase_price for the last date
-        last_record = group.sort_values(by='gregorian_date', ascending=False).iloc[0]
-        return last_record['purchase_price']
+        # Sort the group by the date (since it's a Series now)
+        sorted_group = group.sort_values(ascending=False)  # Sorting by date, descending
+        return sorted_group.iloc[0]  # Return the purchase_price of the last date
     return 0  # If no date, return 0
 
 # Applying the custom aggregation
-filtered_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({
+# For the purchase_price, we need to apply it in a different way than agg()
+filtered_df = filtered_df.sort_values(by='date').groupby(['DLP', 'DLPC', 'store', 'color']).agg({
     'total_quantity': 'sum',
     'total_inventory': 'max',
-    'purchase_price': last_purchase_price  # Custom function for purchase_price
 }).reset_index()
+
+# Now merge the purchase_price column manually by using groupby and last date logic
+purchase_price_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).apply(lambda group: last_purchase_price(group['purchase_price'])).reset_index(name='purchase_price')
+
+# Merge the two DataFrames to include the calculated purchase_price
+filtered_df = filtered_df.merge(purchase_price_df, on=['DLP', 'DLPC', 'store', 'color'])
+
 
 
 # ----- SECTION 8: caclculating essential metrics based on values selected in color, DLP, DLPC, and store
