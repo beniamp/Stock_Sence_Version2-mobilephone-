@@ -298,7 +298,13 @@ if selected_store != 'All stores':
     filtered_df = filtered_df[filtered_df['store'] == selected_store]
 
 # ------ SECTION 9: Calculating last recorded date
-# Assuming 'date' and 'purchase_price' are present in the original filtered_df
+# Custom function to get the last purchase_price based on the latest date
+def last_purchase_price(group):
+    if not group.empty:
+        # Sort the group by the 'date' column, and get the last 'purchase_price'
+        sorted_group = group.sort_values(by='date', ascending=False)
+        return sorted_group['purchase_price'].iloc[0]  # Get purchase price of the latest date
+    return 0  # If no date, return 0
 
 # Step 1: Apply the main aggregation for quantity and inventory
 agg_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({
@@ -309,21 +315,11 @@ agg_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).agg({
 # Step 2: Now, group and apply the custom function for purchase_price using 'date'
 # Keeping the 'purchase_price' and 'date' columns for custom aggregation
 purchase_price_df = filtered_df.groupby(['DLP', 'DLPC', 'store', 'color']).apply(
-    lambda group: last_purchase_price(group[['gregorian_date', 'purchase_price']])
+    lambda group: last_purchase_price(group[['date', 'purchase_price']])
 ).reset_index(name='purchase_price')
 
 # Step 3: Merge the aggregated DataFrame with the purchase_price result
 final_df = agg_df.merge(purchase_price_df, on=['DLP', 'DLPC', 'store', 'color'])
-
-# Custom function to get the last purchase_price based on the latest date
-def last_purchase_price(group):
-    if not group.empty:
-        # Sort the group by the 'date' column, and get the last 'purchase_price'
-        sorted_group = group.sort_values(by='date', ascending=False)
-        return sorted_group['purchase_price'].iloc[0]  # Get purchase price of the latest date
-    return 0  # If no date, return 0
-    
-filtered_df.merge(purchase_price_df, on=['DLP', 'DLPC', 'store', 'color']) 
 
 
 
